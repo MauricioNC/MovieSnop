@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  action: MyString
+  animation: MyString
+  crime: MyString
+  commedy: MyString
+  drama: MyString
+  fiction_and_science: MyString
+  horror: MyString
+  musical: MyString
+  sex: MyString
+  romantic: MyString
+
+two:
+  action: MyString
+  animation: MyString
+  crime: MyString
+  commedy: MyString
+  drama: MyString
+  fiction_and_science: MyString
+  horror: MyString
+  musical: MyString
+  sex: MyString
+  romantic: MyString
