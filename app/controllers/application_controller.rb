@@ -2,7 +2,6 @@ class ApplicationController < ActionController::API
   include JwtToken
   include ActionController::MimeResponds
 
-
   before_action :authenticate
 
   private
@@ -18,6 +17,22 @@ class ApplicationController < ActionController::API
       render json: { errors: e.message, status: :unauthorized }, status: :unauthorized
     rescue JWT::DecodeError => e
       render json: { errors: e.message, status: :unauthorized }, status: :unauthorized
+    end
+  end
+
+  def set_user
+    begin
+      @user ||= @current_user
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
+    end
+  end
+
+  def set_movie
+    begin
+      @movie ||= @current_user.movies.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
     end
   end
 end
