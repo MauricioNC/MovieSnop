@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.json do 
-        render json: User.all
+        render json: { users: User.all, status: 200 }
       end
     end
   end
@@ -14,14 +14,14 @@ class UsersController < ApplicationController
       if @user
         format.json do 
           render json: {
-            user: @user, status: :ok 
+            user: @user, status: 200 
           }
         end
       else
         format.json do 
           render json: {
-            message: "Something went wrong, please try again", status: :unprocessable_entity
-          }
+            message: "Something went wrong, please try again", status: 422
+          }, status: :unprocessable_entity
         end
       end
     end
@@ -34,14 +34,14 @@ class UsersController < ApplicationController
       if @user.save
         format.json do 
           render json: {
-            message: "User created successfully", user: @user, status: :ok 
+            message: "User created successfully", user: @user, status: 200 
           }
         end
       else
         format.json do 
           render json: {
-            message: "Unable to create user '#{@user.name}', please try again", status: :unprocessable_entity
-          }
+            message: "Unable to create user '#{@user.name}', please try again", status: 422
+          }, status: :unprocessable_entity
         end
       end
     end
@@ -52,14 +52,14 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         format.json do 
           render json: {
-            message: "User updated successfully", status: :ok
+            message: "User updated successfully", status: 200
           }
         end
       else
         format.json do
           render json: {
-            message: "Somenthing went wrong updating user '#{user.name}'", status: :unprocessable_entity
-          }
+            message: "Somenthing went wrong updating user '#{user.name}'", status: 422
+          }, status: :unprocessable_entity
         end
       end
     end
@@ -70,15 +70,15 @@ class UsersController < ApplicationController
       if @user.destroy
         format.json do
           render json: {
-            message: "User deleted successfully", status: :ok
+            message: "User deleted successfully", status: 200
           }
         end
       else
         format.html {  }
         format.json do 
           render json: { 
-            message: "Somenthing went wrong deleting user '#{user.name}'", status: :unprocessable_entity
-          }
+            message: "Somenthing went wrong deleting user '#{user.name}'", status: 422
+          }, status: :unprocessable_entity
         end
       end
     end
@@ -91,6 +91,10 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    begin
+      @user ||= User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
+    end
   end
 end
