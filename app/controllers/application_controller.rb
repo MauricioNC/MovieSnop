@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
 
   def set_user
     begin
-      @user ||= @current_user
+      @user ||= User.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
     end

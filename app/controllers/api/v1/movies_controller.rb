@@ -1,4 +1,4 @@
-class MoviesController < ApplicationController
+class Api::V1::MoviesController < ApplicationController
   before_action :set_user, only: [ :create ]
   before_action :set_error, only: [ :index, :show_by_user ]
   before_action :set_movie, only: [ :show, :update, :destroy ]
@@ -52,47 +52,30 @@ class MoviesController < ApplicationController
 
   def create
     @movie = @user.movies.build(movie_params)
-    respond_to do |format|
-      if @movie.save
-        format.json do
-          render json: {
-            message: "The movie '#{@movie.title}' was registered successfully",
-            movie: @movie,
-            status: 200
-          }
-        end
-      else
-        format.json do
-          render json: {
-            message: "Someting went wrong registering movie '#{@movie.title}'",
-            errors: @movie.errors.full_messages,
-            status: 422
-          }, status: :unprocessable_entity
-        end
-      end
+    
+    if @movie.save
+      render json: {
+        message: "The movie '#{@movie.title}' was registered successfully",
+        movie: @movie,
+        status: 200
+      }
+    else
+      render json: {
+        message: "Someting went wrong registering movie '#{@movie.title}'",
+        errors: @movie.errors.full_messages,
+        status: 422
+      }, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      format.json do
-        render json: {
-          message: "The movie '#{@movie.title}' was updated successfully",
-          status: 200
-        }
-      end
-    end
+    @movie.update(movie_params)
+    render json: { message: "The movie '#{@movie.title}' was updated successfully", status: 200 }
   end
 
   def destroy
-    respond_to do |format|
-      format.json do
-        render json: {
-          message: "Movie deleted successfully",
-          status: 200
-        }
-      end
-    end
+    @movie.destroy
+    render json: { message: "Movie deleted successfully", status: 200 }
   end
 
   private
