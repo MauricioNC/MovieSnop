@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :users
+
+      scope '/admin/:admin_id' do
+        resources :users
+      end
       
       scope '/users/:user_id' do
         resources :movies

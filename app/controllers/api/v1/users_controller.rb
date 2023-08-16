@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  before_action :validate_admin
   
   def index
     render json: { users: User.all, status: 200 }
@@ -37,5 +38,11 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :username, :email, :password, :password_confirmation, :role)  
+  end
+
+  def validate_admin
+    if User.where(id: params[:admin_id]).where(role: "admin").empty?
+      render json: { error: "Unauthorized", status: 401 }, status: :unauthorized
+    end
   end
 end
