@@ -1,53 +1,23 @@
 class Api::V1::MoviesController < ApplicationController
-  before_action :set_user, only: [ :create ]
-  before_action :set_error, only: [ :index, :show_by_user ]
-  before_action :set_movie, only: [ :show, :update, :destroy ]
+  before_action :set_user, only: %i[ index show create update destroy ]
+  before_action :set_movie, only: %i[ show update destroy ]
 
   def get_all
-    begin
-      validate_user_query
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, status: 422 }, status: :unprocessable_entity
-      return
+    @response = []
+    
+    User.all.each do |u|
+      @response.push({ user_id: u.id, movies: u.movies })
     end
 
-    render json: {
-      username: @user_query.username,
-      movies: @user_query.movies,
-      status: 200
-    }
+    render json: { data: @response, status: 200 }
   end
 
   def index
-    render json: { movies: @current_user.movies.all, status: 200 }
+    render json: { movies: @user.movies.all, status: 200 }
   end
 
   def show
-    respond_to do |format|
-      format.json do
-        render json: { movie: @movie, status: 200 }
-      end
-    end
-  end
-
-  def show_by_user
-    begin
-      validate_user_query
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, status: 422 }, status: :unprocessable_entity
-      return
-    end
-
-    begin
-      render json: {
-        username: @user_query.username,
-        movies: @user_query.movies.find(params[:movie_id]),
-        status: 200
-      }
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, status: 422 }, status: :unprocessable_entity
-    end
-
+    render json: { movie: @movie, status: 200 }
   end
 
   def create
@@ -82,13 +52,5 @@ class Api::V1::MoviesController < ApplicationController
 
   def movie_params
     params.require(:movie).permit(:title, :duration, :thriller_link, :public_date, :director_id)
-  end
-
-  def set_error
-    @error = nil
-  end
-
-  def validate_user_query
-    @user_query = User.find(params[:user_id])
   end
 end

@@ -23,15 +23,11 @@ class ApplicationController < ActionController::API
   end
 
   def set_user
-    @user ||= User.find(params[:id])
+    @user ||= User.find(params[:user_id])
   end
 
   def set_movie
-    begin
-      @movie ||= @user.movies.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
-    end
+    @movie ||= @user.movies.find(params[:id])
   end
 
   # Errors
