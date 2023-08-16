@@ -4,6 +4,8 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
   private
 
   def authenticate
@@ -21,18 +23,20 @@ class ApplicationController < ActionController::API
   end
 
   def set_user
+    @user ||= User.find(params[:id])
+  end
+
+  def set_movie
     begin
-      @user ||= User.find(params[:id])
+      @movie ||= @user.movies.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
     end
   end
 
-  def set_movie
-    begin
-      @movie ||= @current_user.movies.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message, status: 422 }, status: :unprocessable_entity
-    end
+  # Errors
+
+  def not_found
+    render json: { error: "Record not found", status: 422 }, status: :unprocessable_entity
   end
 end

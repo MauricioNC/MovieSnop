@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       resources :movies
+
+      scope '/movies/:movie_id' do
+        resources :comments
+      end
     
       post 'auth/login', to: 'authentication#login'
     
