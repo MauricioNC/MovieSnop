@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
+  skip_before_action :authenticate, only: %i[ create ]
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :validate_admin
+  before_action :validate_admin, only: %i[ index update destroy ]
   
   def index
     render json: { users: User.all, status: 200 }

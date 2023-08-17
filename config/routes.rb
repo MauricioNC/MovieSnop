@@ -3,9 +3,11 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       scope '/admin/:admin_id' do
-        resources :users
+        resources :users, only: %i[ index show update destroy ]
       end
       
+      post '/users', to: "users#create"
+
       scope '/users/:user_id' do
         resources :movies
       end
