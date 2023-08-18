@@ -41,14 +41,18 @@ RSpec.configure do |config|
           }
         },
         parameters: {
-          get_movies_from_user: {
+          user_id: {
             name: :user_id,
             in: :path,
             required: true,
-            schema: {
-              type: :string
-            }
-          }
+            schema: { type: :string }
+          },
+          movie_id: {
+            name: :id,
+            in: :path,
+            required: true,
+            schema: { type: :string }
+          },
         },
         schemas: {
           get_all_movies_resp: {
@@ -68,6 +72,13 @@ RSpec.configure do |config|
                 type: :array,
                 items: { type: :string }
               },
+              status: { type: :integer }
+            }
+          },
+          get_movie: {
+            type: :object,
+            properties: {
+              movie: { type: :string },
               status: { type: :integer }
             }
           },

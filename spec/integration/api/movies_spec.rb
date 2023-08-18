@@ -28,7 +28,7 @@ RSpec.describe 'Movies API', type: :request do
     get "Get all movies from specific user" do
       tags "Movies - HTTP verbs"
       security [ { ApiKeyAuth: [] } ]
-      parameter "$ref" => "#/components/parameters/get_movies_from_user"
+      parameter "$ref" => "#/components/parameters/user_id"
       produces "application/json"
 
       response "200", "OK" do
@@ -37,6 +37,31 @@ RSpec.describe 'Movies API', type: :request do
       end
 
       response "422", "Record not found" do
+        schema "$ref" => "#/components/schemas/error"
+        run_test!
+      end
+
+      response "401", "Unauthorized" do
+        schema "$ref" => "#/components/schemas/error"
+        run_test!
+      end
+    end
+  end
+
+  path "/users/{user_id}/movies/{id}" do
+    get "Show movie" do
+      tags "Show specific movie from user"
+      security [ { ApiKeyAuth: [] } ]
+      parameter "$ref" => "#/components/parameters/user_id"
+      parameter "$ref" => "#/components/parameters/movie_id"
+      produces "application/json"
+
+      response "200", "OK" do
+        schema "$ref" => "#/components/schemas/get_movie"
+        run_test!
+      end
+      
+      response "422", "Unprocessable entity" do
         schema "$ref" => "#/components/schemas/error"
         run_test!
       end
