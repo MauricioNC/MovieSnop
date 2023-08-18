@@ -48,11 +48,31 @@ RSpec.configure do |config|
             schema: { type: :string }
           },
           movie_id: {
-            name: :id,
+            name: :movie_id,
             in: :path,
             required: true,
             schema: { type: :string }
           },
+          movie_params: {
+            name: :movie,
+            in: :query,
+            required: true,
+            schema: {
+              type: :object,
+              properties: {
+                movie: {
+                  type: :object,
+                  properties: {
+                    title: { type: :string },
+                    duration: { type: :string },
+                    thriller_link: { type: :string },
+                    public_date: { type: :string },
+                    director_id: { type: :number }
+                  }
+                }
+              }
+            }
+          }
         },
         schemas: {
           get_all_movies_resp: {
@@ -79,6 +99,13 @@ RSpec.configure do |config|
             type: :object,
             properties: {
               movie: { type: :string },
+              status: { type: :integer }
+            }
+          },
+          movie_message_response: {
+            type: :object,
+            properties: {
+              message: { type: :string },
               status: { type: :integer }
             }
           },

@@ -42,7 +42,7 @@ paths:
     get:
       summary: Get all movies
       tags:
-      - List all movies
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       responses:
@@ -67,8 +67,6 @@ paths:
   "/users/{user_id}/movies":
     get:
       summary: Get all movies from specific user
-      tags:
-      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
@@ -92,11 +90,9 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/error"
-  "/users/{user_id}/movies/{id}":
+  "/users/{user_id}/movies/{movie_id}":
     get:
-      summary: Show movie
-      tags:
-      - Show specific movie from user
+      summary: Show specific movie from user
       security:
       - ApiKeyAuth: []
       parameters:
@@ -109,6 +105,86 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/get_movie"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    patch:
+      summary: Update single field from movie record
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/movie_params"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/movie_message_response"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    put:
+      summary: Update a completed record from movies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/movie_params"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/movie_message_response"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    delete:
+      summary: Delete a movie
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/movie_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/movie_message_response"
         '422':
           description: Unprocessable entity
           content:
@@ -140,11 +216,31 @@ components:
       schema:
         type: string
     movie_id:
-      name: id
+      name: movie_id
       in: path
       required: true
       schema:
         type: string
+    movie_params:
+      name: movie
+      in: query
+      required: true
+      schema:
+        type: object
+        properties:
+          movie:
+            type: object
+            properties:
+              title:
+                type: string
+              duration:
+                type: string
+              thriller_link:
+                type: string
+              public_date:
+                type: string
+              director_id:
+                type: number
   schemas:
     get_all_movies_resp:
       type: object
@@ -168,6 +264,13 @@ components:
       type: object
       properties:
         movie:
+          type: string
+        status:
+          type: integer
+    movie_message_response:
+      type: object
+      properties:
+        message:
           type: string
         status:
           type: integer
