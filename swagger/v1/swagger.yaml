@@ -1,0 +1,138 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/auth/login":
+    post:
+      summary: Generates JWT token
+      tags:
+      - Authorization with JWT token
+      parameters:
+      - name: auth
+        in: query
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          required:
+          - email
+          - password
+      responses:
+        '200':
+          description: Valid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  time:
+                    type: string
+                  username:
+                    type: string
+        '401':
+          description: Unauthorized
+  "/movies":
+    get:
+      summary: Get all movies
+      tags:
+      - List all movies
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/get_all_movies_resp"
+        '422':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/users/{user_id}/movies":
+    get:
+      summary: Get all movies from specific user
+      tags:
+      - Movies - HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/get_movies_from_user"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/get_movies_from_user_resp"
+        '422':
+          description: Record not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+servers:
+- url: http://localhost:3000/api/v1
+  variables:
+    defaultHost:
+      default: localhost:3000/api/v1
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    get_movies_from_user:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    get_all_movies_resp:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+    get_movies_from_user_resp:
+      type: object
+      properties:
+        movies:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: integer

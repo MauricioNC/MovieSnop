@@ -16,9 +16,9 @@ class ApplicationController < ActionController::API
       @decoded = jwt_decode(header)
       @current_user = User.find(@decoded[:user_id])
     rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message, status: :unauthorized }, status: :unauthorized
+      render json: { error: e.message, status: 401 }, status: :unauthorized
     rescue JWT::DecodeError => e
-      render json: { errors: e.message, status: :unauthorized }, status: :unauthorized
+      render json: { error: e.message, status: 401 }, status: :unauthorized
     end
   end
 
