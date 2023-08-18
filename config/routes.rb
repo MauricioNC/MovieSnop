@@ -5,19 +5,19 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       scope '/admin/:admin_id' do
-        resources :users, only: %i[ index show update destroy ]
+        resources :users, only: %i[ index show update destroy ], param: :user_id
       end
       
       post '/users', to: "users#create"
 
       scope '/users/:user_id' do
-        resources :movies
+        resources :movies, param: :movie_id
       end
 
       get '/movies', to: "movies#get_all"
 
       scope '/movies/:movie_id' do
-        resources :comments
+        resources :comments, param: :comment_id
       end
       
       post 'auth/login', to: 'authentication#login'

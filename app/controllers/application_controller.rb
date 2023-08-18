@@ -27,7 +27,7 @@ class ApplicationController < ActionController::API
   end
 
   def set_movie
-    @movie ||= @user.movies.find(params[:id])
+    @movie ||= @user.movies.find(params[:movie_id])
   end
 
   # Errors

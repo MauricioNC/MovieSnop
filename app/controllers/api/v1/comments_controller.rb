@@ -38,7 +38,7 @@ class Api::V1::CommentsController < ApplicationController
   end
 
   def set_comment
-    @comment ||= @movie.comments.find(params[:id])
+    @comment ||= @movie.comments.find(params[:comment_id])
   end
   
   def comment_params
