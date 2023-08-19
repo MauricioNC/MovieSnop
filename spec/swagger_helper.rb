@@ -109,6 +109,29 @@ RSpec.configure do |config|
               status: { type: :integer }
             }
           },
+          comment_response: {
+            type: :object,
+            properties: {
+              movie: { type: :object },
+              comment: { type: :object },
+              status: { type: :integer }
+            }
+          },
+          create_comment: {
+            type: :object,
+              properties: {
+                comment: {
+                  type: :object,
+                  properties: {
+                    comment: { type: :string },
+                    rate: { type: :string },
+                    user_id: { type: :integer },
+                    commentable_type: { type: :string },
+                    commentable_id: { type: :integer }
+                  }
+                }
+              }
+          },
           error: {
             type: :object,
             properties: {

@@ -38,6 +38,195 @@ paths:
                     type: string
         '401':
           description: Unauthorized
+  "/movies/{movie_id}/comments":
+    post:
+      summary: Create new comment
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      requestBody:
+        description: You can ommit "commentable_type" and "comentable_id" fields, only pass "commentable" with the movie object.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/create_comment"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    get:
+      summary: Get all comments by movie
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/movies/{movie_id}/comments/{comment_id}":
+    get:
+      summary: Get specific comment
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/comment_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    patch:
+      summary: Update partial fields for specific comment
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/comment_id"
+      requestBody:
+        description: Params to send for partial update. If you want to update entire reocrd, use PUT verb
+        required: true
+        content: 
+          application/json:
+            schema: 
+              "$ref": "#/components/schemas/create_comment"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    put:
+      summary: Update entire fields for specific comment
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/comment_id"
+      requestBody:
+        description: Params to send for update an entire comment.
+        required: true
+        content: 
+          application/json:
+            schema: 
+              "$ref": "#/components/schemas/create_comment"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    delete:
+      summary: Delete a specific comment
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Comments - HTTP verbs
+      parameters:
+      - "$ref": "#/components/parameters/movie_id"
+      - "$ref": "#/components/parameters/comment_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/comment_response"
+        '422':
+          description: Unprocesable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorize
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
   "/movies":
     get:
       summary: Get all movies
@@ -67,6 +256,8 @@ paths:
   "/users/{user_id}/movies":
     get:
       summary: Get all movies from specific user
+      tags:
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
@@ -93,6 +284,8 @@ paths:
   "/users/{user_id}/movies/{movie_id}":
     get:
       summary: Show specific movie from user
+      tags:
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
@@ -119,12 +312,20 @@ paths:
                 "$ref": "#/components/schemas/error"
     patch:
       summary: Update single field from movie record
+      tags:
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
       - "$ref": "#/components/parameters/user_id"
       - "$ref": "#/components/parameters/movie_id"
-      - "$ref": "#/components/parameters/movie_params"
+      requestBody:
+        description: You can update one or more fields, for a complete update, please use put verb.
+        required: true
+        content:
+          application/json:
+            schema: 
+              "$ref": "#/components/schemas/movie_params"
       responses:
         '200':
           description: OK
@@ -146,12 +347,21 @@ paths:
                 "$ref": "#/components/schemas/error"
     put:
       summary: Update a completed record from movies
+      tags:
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
       - "$ref": "#/components/parameters/user_id"
       - "$ref": "#/components/parameters/movie_id"
-      - "$ref": "#/components/parameters/movie_params"
+      requestBody:
+        description: Parameters to send to updated completly a movie
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/movie_params"
+
       responses:
         '200':
           description: OK
@@ -173,6 +383,8 @@ paths:
                 "$ref": "#/components/schemas/error"
     delete:
       summary: Delete a movie
+      tags:
+      - Movies - HTTP verbs
       security:
       - ApiKeyAuth: []
       parameters:
@@ -221,27 +433,29 @@ components:
       required: true
       schema:
         type: string
-    movie_params:
-      name: movie
-      in: query
+    comment_id:
+      name: comment_id
+      in: path
       required: true
       schema:
-        type: object
-        properties:
-          movie:
-            type: object
-            properties:
-              title:
-                type: string
-              duration:
-                type: string
-              thriller_link:
-                type: string
-              public_date:
-                type: string
-              director_id:
-                type: number
+        type: string
   schemas:
+    movie_params:
+      type: object
+      properties:
+        movie:
+          type: object
+          properties:
+            title:
+              type: string
+            duration:
+              type: string
+            thriller_link:
+              type: string
+            public_date:
+              type: string
+            director_id:
+              type: number
     get_all_movies_resp:
       type: object
       properties:
@@ -274,6 +488,31 @@ components:
           type: string
         status:
           type: integer
+    comment_response:
+      type: object
+      properties:
+        movie:
+          type: object
+        comment:
+          type: object
+        status:
+          type: integer
+    create_comment:
+      type: object
+      properties:
+        comment:
+          type: object
+          properties:
+            comment:
+              type: string
+            rate:
+              type: string
+            user_id:
+              type: integer
+            commentable_type:
+              type: string
+            commentable_id:
+              type: integer
     error:
       type: object
       properties:
