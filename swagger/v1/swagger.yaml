@@ -289,7 +289,13 @@ paths:
       - ApiKeyAuth: []
       parameters:
       - "$ref": "#/components/parameters/user_id"
-      - "$ref": "#/components/schemas/movie_params"
+      requestBody:
+        description: Conent to send to create a new movie
+        required: true
+        content: 
+          application/json:
+            schema: 
+              "$ref": "#/components/schemas/create_movie"
       responses:
         '200':
           description: OK
