@@ -443,6 +443,195 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/error"
+  "/users/{user_id}/directors":
+    get:
+      summary: Get all directors
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/get_all_directors"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    post:
+      summary: Create new director
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      requestBody:
+        description: Body to send to create a new director
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/create_director"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/get_all_directors"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/users/{user_id}/directors/{director_id}":
+    get:
+      summary: Show specific director
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/director_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/get_director"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    patch:
+      summary: Update a director
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/director_id"
+      requestBody:
+        description: Body to send to update a director
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/create_director"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/director_message"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    put:
+      summary: Update a director
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/director_id"
+      requestBody:
+        description: Body to send to update a director
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/create_director"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/director_message"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    delete:
+      summary: Update a director
+      tags:
+      - Directors HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/parameters/director_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/director_message"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
 servers:
 - url: https://moviesnop-api.onrender.com/api/v1
   variables:
@@ -469,6 +658,12 @@ components:
         type: string
     comment_id:
       name: comment_id
+      in: path
+      required: true
+      schema:
+        type: string
+    director_id:
+      name: director_id
       in: path
       required: true
       schema:
@@ -556,6 +751,34 @@ components:
               type: string
             commentable_id:
               type: integer
+    get_all_directors:
+      type: object
+      properties:
+        directors:
+          type: array
+          items:
+            type: string
+        status:
+          type: integer
+    get_director:
+      type: object
+      properties:
+        director:
+          type: string
+        status:
+          type: integer
+    director_message:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+    create_director:
+      type: object
+      properties:
+        name:
+          type: string
     error:
       type: object
       properties:
