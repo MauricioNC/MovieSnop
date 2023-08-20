@@ -281,6 +281,34 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/error"
+    post:
+      summary: Create a new movie
+      tags:
+      - Movies - HTTP verbs
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - "$ref": "#/components/parameters/user_id"
+      - "$ref": "#/components/schemas/movie_params"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/create_movie"
+        '422':
+          description: Record not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
   "/users/{user_id}/movies/{movie_id}":
     get:
       summary: Show specific movie from user
@@ -309,7 +337,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/error"
+                "$ref": "#/components/schemas/error"        
     patch:
       summary: Update single field from movie record
       tags:
@@ -479,6 +507,15 @@ components:
       properties:
         movie:
           type: string
+        status:
+          type: integer
+    create_movie:
+      type: object
+      properties:
+        message:
+          type: string
+        movie:
+          type: object
         status:
           type: integer
     movie_message_response:
