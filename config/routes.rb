@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
       scope '/users/:user_id' do
         resources :movies, param: :movie_id
+        resources :directors, param: :director_id
       end
 
       get '/movies', to: "movies#get_all"
@@ -19,6 +20,7 @@ Rails.application.routes.draw do
       scope '/movies/:movie_id' do
         resources :comments, param: :comment_id
       end
+
       
       post 'auth/login', to: 'authentication#login'
     end
