@@ -295,14 +295,14 @@ paths:
         content: 
           application/json:
             schema: 
-              "$ref": "#/components/schemas/create_movie"
+              "$ref": "#/components/schemas/movie_params"
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/create_movie"
+                "$ref": "#/components/schemas/create_movie_params"
         '422':
           description: Record not found
           content:
@@ -515,7 +515,7 @@ components:
           type: string
         status:
           type: integer
-    create_movie:
+    create_movie_response:
       type: object
       properties:
         message:
